@@ -2,198 +2,202 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>e-Surat - Dashboard</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - e-Surat Kecamatan Kapuas Hulu</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    body {
+      background: #f4f6f8;
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: linear-gradient(135deg, #0066cc, #004a99);
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    header img {
+      height: 60px;
+      margin-right: 10px;
+    }
+    header h2 {
+      flex: 1;
+      margin: 0;
+    }
+    .btn-menu { margin: 1rem; }
+    .card {
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .table thead {
+      background: #0066cc;
+      color: white;
+    }
+    #formSection {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .footer {
+      text-align: center;
+      padding: 1rem;
+      color: #777;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="container">
-      <div class="brand">
-        <img src="https://www.kapuashulukab.go.id/home/public/assets/images/pages/pages_70Logo-KH-Baru.png" alt="Logo" class="logo-sm">
-        <h1>e-Surat</h1>
-      </div>
-      <div class="actions">
-        <button class="btn small" id="logoutBtn">Logout</button>
-      </div>
+  <header>
+    <div class="d-flex align-items-center">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/62/Lambang_Kabupaten_Kapuas_Hulu.png" alt="Logo Kapuas Hulu">
+      <h2 class="d-inline">E-Surat Kecamatan Kapuas Hulu</h2>
     </div>
+    <button class="btn btn-light btn-sm" onclick="logout()">Logout</button>
   </header>
 
-  <main class="container">
-    <section class="cards">
-      <button class="card" id="btnMasuk">
-        <div class="icon">📥</div>
-        <div class="label">Surat Masuk</div>
-      </button>
-      <button class="card" id="btnKeluar">
-        <div class="icon">📤</div>
-        <div class="label">Surat Keluar</div>
-      </button>
-    </section>
+  <div class="container my-4 text-center">
+    <button class="btn btn-primary btn-menu" onclick="showForm('masuk')">📥 Surat Masuk</button>
+    <button class="btn btn-success btn-menu" onclick="showForm('keluar')">📤 Surat Keluar</button>
+  </div>
 
-    <section class="form-area" id="formArea" style="display:none;">
-      <h2 id="formTitle">Form</h2>
-      <form id="suratForm">
-        <div class="grid">
-          <div class="field"><label>Nomor</label><input type="number" id="nomor" readonly></div>
-          <div class="field"><label>Nomor Surat</label><input type="text" id="nomorSurat" required></div>
-          <div class="field"><label>Tanggal Surat</label><input type="date" id="tanggalSurat" required></div>
-          <div class="field"><label>Hal</label><input type="text" id="hal" required></div>
-          <div class="field" id="tglTerimaKirimField"><label>Tanggal Terima/Kirim</label><input type="date" id="tanggalTerimaKirim" required></div>
-          <div class="field"><label id="asalTujuanLabel">Asal/Tujuan</label><input type="text" id="asalTujuan" required></div>
+  <div id="formSection" class="container">
+    <div class="card p-4">
+      <h4 id="formTitle"></h4>
+      <form id="suratForm" class="row g-3 mt-2">
+        <div class="col-md-3">
+          <label class="form-label">Nomor</label>
+          <input type="text" class="form-control" id="nomor" required>
         </div>
-        <div style="margin-top:12px;">
-          <button type="submit" class="btn">Simpan</button>
-          <button type="button" class="btn ghost" id="btnCancel">Batal</button>
+        <div class="col-md-3">
+          <label class="form-label">Nomor Surat</label>
+          <input type="text" class="form-control" id="nomorSurat" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Tanggal Surat</label>
+          <input type="date" class="form-control" id="tanggalSurat" required>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Hal</label>
+          <input type="text" class="form-control" id="hal" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" id="labelAsalTujuan"></label>
+          <input type="text" class="form-control" id="asalTujuan" required>
+        </div>
+        <div class="col-12 text-end">
+          <button type="submit" class="btn btn-primary">Simpan</button>
         </div>
       </form>
-    </section>
+    </div>
 
-    <section class="table-area">
-      <h3 id="tableTitle">Daftar Surat</h3>
-      <div class="table-wrap">
-        <table id="dataTable">
+    <div class="card mt-4 p-3">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="m-0">📋 Data <span id="dataType"></span></h5>
+        <button class="btn btn-danger btn-sm" onclick="downloadPDF()">Download PDF</button>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-striped align-middle" id="dataTable">
           <thead>
             <tr>
+              <th>No</th>
               <th>Nomor</th>
               <th>Nomor Surat</th>
               <th>Tanggal Surat</th>
               <th>Hal</th>
-              <th>Tgl Terima/Kirim</th>
-              <th>Asal/Tujuan</th>
-              <th>Aksi</th>
+              <th id="headerAsalTujuan"></th>
             </tr>
           </thead>
           <tbody></tbody>
         </table>
       </div>
-    </section>
-  </main>
+    </div>
+  </div>
 
-<script>
-// require login
-if(localStorage.getItem('loggedIn') !== 'true') {
-  window.location.href = 'index.html';
-}
+  <div class="footer">
+    &copy; 2025 E-Surat Kecamatan Kapuas Hulu | Dibuat oleh Forta
+  </div>
 
-const btnMasuk = document.getElementById('btnMasuk');
-const btnKeluar = document.getElementById('btnKeluar');
-const formArea = document.getElementById('formArea');
-const formTitle = document.getElementById('formTitle');
-const suratForm = document.getElementById('suratForm');
-const dataTable = document.querySelector('#dataTable tbody');
-const tableTitle = document.getElementById('tableTitle');
-const nomorInput = document.getElementById('nomor');
-const asalTujuanLabel = document.getElementById('asalTujuanLabel');
-const btnCancel = document.getElementById('btnCancel');
-const logoutBtn = document.getElementById('logoutBtn');
-const tglTerimaKirimField = document.getElementById('tglTerimaKirimField');
+  <script>
+    // Cek login
+    if(localStorage.getItem('loggedIn') !== 'true') {
+      window.location.href = 'index.html';
+    }
 
-let mode = null; // 'masuk' or 'keluar'
+    let currentType = '';
+    const formSection = document.getElementById('formSection');
+    const formTitle = document.getElementById('formTitle');
+    const labelAsalTujuan = document.getElementById('labelAsalTujuan');
+    const headerAsalTujuan = document.getElementById('headerAsalTujuan');
+    const dataType = document.getElementById('dataType');
+    const dataTable = document.getElementById('dataTable').querySelector('tbody');
 
-function loadData(modeKey) {
-  const raw = localStorage.getItem(modeKey);
-  return raw ? JSON.parse(raw) : [];
-}
+    function logout(){
+      localStorage.removeItem('loggedIn');
+      window.location.href = 'index.html';
+    }
 
-function saveData(modeKey, arr) {
-  localStorage.setItem(modeKey, JSON.stringify(arr));
-}
+    function showForm(type) {
+      currentType = type;
+      formSection.style.display = 'block';
+      formTitle.textContent = type === 'masuk' ? 'Form Surat Masuk' : 'Form Surat Keluar';
+      labelAsalTujuan.textContent = type === 'masuk' ? 'Asal Surat' : 'Tujuan Surat';
+      headerAsalTujuan.textContent = type === 'masuk' ? 'Asal Surat' : 'Tujuan Surat';
+      dataType.textContent = type === 'masuk' ? 'Surat Masuk' : 'Surat Keluar';
+      loadData();
+    }
 
-function renderTable(modeKey) {
-  const arr = loadData(modeKey);
-  dataTable.innerHTML = '';
-  arr.forEach(item => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${item.nomor}</td>
-      <td>${item.nomorSurat}</td>
-      <td>${item.tanggalSurat}</td>
-      <td>${item.hal}</td>
-      <td>${item.tanggalTerimaKirim}</td>
-      <td>${item.asalTujuan}</td>
-      <td>
-        <button class="btn small ghost" data-action="delete" data-id="${item.nomor}">Hapus</button>
-      </td>
-    `;
-    dataTable.appendChild(tr);
-  });
-  tableTitle.textContent = modeKey === 'suratMasuk' ? 'Daftar Surat Masuk' : 'Daftar Surat Keluar';
-}
+    document.getElementById('suratForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const data = {
+        nomor: nomor.value,
+        nomorSurat: nomorSurat.value,
+        tanggalSurat: tanggalSurat.value,
+        hal: hal.value,
+        asalTujuan: asalTujuan.value
+      };
+      let stored = JSON.parse(localStorage.getItem(currentType)) || [];
+      stored.push(data);
+      localStorage.setItem(currentType, JSON.stringify(stored));
+      this.reset();
+      loadData();
+    });
 
-// set auto nomor
-function nextNomor(modeKey) {
-  const arr = loadData(modeKey);
-  if(arr.length === 0) return 1;
-  return Math.max(...arr.map(x => Number(x.nomor))) + 1;
-}
+    function loadData() {
+      let stored = JSON.parse(localStorage.getItem(currentType)) || [];
+      dataTable.innerHTML = '';
+      stored.forEach((d, i) => {
+        const row = `<tr>
+          <td>${i + 1}</td>
+          <td>${d.nomor}</td>
+          <td>${d.nomorSurat}</td>
+          <td>${d.tanggalSurat}</td>
+          <td>${d.hal}</td>
+          <td>${d.asalTujuan}</td>
+        </tr>`;
+        dataTable.innerHTML += row;
+      });
+    }
 
-btnMasuk.addEventListener('click', ()=>{
-  mode = 'masuk';
-  formArea.style.display = 'block';
-  formTitle.textContent = 'Form Surat Masuk';
-  nomorInput.value = nextNomor('suratMasuk');
-  asalTujuanLabel.textContent = 'Asal Surat';
-  renderTable('suratMasuk');
-});
-
-btnKeluar.addEventListener('click', ()=>{
-  mode = 'keluar';
-  formArea.style.display = 'block';
-  formTitle.textContent = 'Form Surat Keluar';
-  nomorInput.value = nextNomor('suratKeluar');
-  asalTujuanLabel.textContent = 'Tujuan Surat';
-  renderTable('suratKeluar');
-});
-
-btnCancel.addEventListener('click', ()=>{
-  formArea.style.display = 'none';
-  suratForm.reset();
-});
-
-suratForm.addEventListener('submit', function(e){
-  e.preventDefault();
-  if(!mode) return alert('Pilih Surat Masuk atau Surat Keluar terlebih dahulu.');
-  const nomor = nomorInput.value;
-  const nomorSurat = document.getElementById('nomorSurat').value.trim();
-  const tanggalSurat = document.getElementById('tanggalSurat').value;
-  const hal = document.getElementById('hal').value.trim();
-  const tanggalTerimaKirim = document.getElementById('tanggalTerimaKirim').value;
-  const asalTujuan = document.getElementById('asalTujuan').value.trim();
-
-  const item = { nomor, nomorSurat, tanggalSurat, hal, tanggalTerimaKirim, asalTujuan };
-  const key = mode === 'masuk' ? 'suratMasuk' : 'suratKeluar';
-  const arr = loadData(key);
-  arr.push(item);
-  saveData(key, arr);
-  renderTable(key);
-  suratForm.reset();
-  nomorInput.value = nextNomor(key);
-});
-
-// delegate delete
-dataTable.addEventListener('click', function(e){
-  const btn = e.target.closest('button[data-action]');
-  if(!btn) return;
-  const action = btn.getAttribute('data-action');
-  const id = btn.getAttribute('data-id');
-  const key = mode === 'masuk' ? 'suratMasuk' : 'suratKeluar';
-  if(action === 'delete') {
-    let arr = loadData(key);
-    arr = arr.filter(x => String(x.nomor) !== String(id));
-    saveData(key, arr);
-    renderTable(key);
-  }
-});
-
-logoutBtn.addEventListener('click', function(){
-  localStorage.removeItem('loggedIn');
-  window.location.href = 'index.html';
-});
-
-// initial render show all (both) if desired
-renderTable('suratMasuk');
-renderTable('suratKeluar');
-</script>
+    function downloadPDF() {
+      const element = document.querySelector('.card.mt-4');
+      const opt = {
+        margin: 0.5,
+        filename: `${currentType}-data.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().from(element).set(opt).save();
+    }
+  </script>
 </body>
 </html>
