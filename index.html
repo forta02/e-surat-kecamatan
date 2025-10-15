@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>E-Surat Kecamatan Kapuas Hulu</title>
+  <title>Dashboard - e-Surat Kecamatan Kapuas Hulu</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
@@ -17,16 +17,20 @@
       background: linear-gradient(135deg, #0066cc, #004a99);
       color: white;
       padding: 1rem;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
     header img {
       height: 60px;
       margin-right: 10px;
     }
-    .btn-menu {
-      margin: 1rem;
+    header h2 {
+      flex: 1;
+      margin: 0;
     }
+    .btn-menu { margin: 1rem; }
     .card {
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -53,8 +57,11 @@
 </head>
 <body>
   <header>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/62/Lambang_Kabupaten_Kapuas_Hulu.png" alt="Logo Kapuas Hulu">
-    <h2 class="d-inline">E-Surat Kecamatan Kapuas Hulu</h2>
+    <div class="d-flex align-items-center">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/62/Lambang_Kabupaten_Kapuas_Hulu.png" alt="Logo Kapuas Hulu">
+      <h2 class="d-inline">E-Surat Kecamatan Kapuas Hulu</h2>
+    </div>
+    <button class="btn btn-light btn-sm" onclick="logout()">Logout</button>
   </header>
 
   <div class="container my-4 text-center">
@@ -116,10 +123,15 @@
   </div>
 
   <div class="footer">
-    &copy; 2025 E-Surat Kecamatan Kapuas Hulu | Dibuat dengan ❤️ oleh Forta
+    &copy; 2025 E-Surat Kecamatan Kapuas Hulu | Dibuat oleh Forta
   </div>
 
   <script>
+    // Cek login
+    if(localStorage.getItem('loggedIn') !== 'true') {
+      window.location.href = 'index.html';
+    }
+
     let currentType = '';
     const formSection = document.getElementById('formSection');
     const formTitle = document.getElementById('formTitle');
@@ -127,6 +139,11 @@
     const headerAsalTujuan = document.getElementById('headerAsalTujuan');
     const dataType = document.getElementById('dataType');
     const dataTable = document.getElementById('dataTable').querySelector('tbody');
+
+    function logout(){
+      localStorage.removeItem('loggedIn');
+      window.location.href = 'index.html';
+    }
 
     function showForm(type) {
       currentType = type;
