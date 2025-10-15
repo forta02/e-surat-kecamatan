@@ -1,125 +1,109 @@
 body {
   font-family: Arial, sans-serif;
-  background: #f0f0f0;
+  background: #f5f7fa;
   margin: 0;
-  padding: 0;
 }
 
-.login-container {
+.navbar {
+  background: #007b5e;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+.navbar .logo {
+  height: 50px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 30px auto;
   background: white;
-  padding: 30px;
+  padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  text-align: center;
-  width: 320px;
-  margin: 100px auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.logo {
-  width: 120px;
+.menu {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
-h2 {
-  margin-bottom: 20px;
-  color: #007b5e;
+.btn-menu {
+  background: #007b5e;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
 }
 
-input, button {
-  width: 90%;
-  padding: 10px;
-  margin: 8px 0;
-  border-radius: 5px;
+.btn-menu:hover {
+  background: #005a43;
+}
+
+form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+input, textarea {
+  padding: 8px;
   border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 button {
   background: #007b5e;
   color: white;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  padding: 10px;
 }
 
 button:hover {
   background: #005a43;
 }
 
-.error {
-  color: red;
-  margin-top: 10px;
-}
-
-.dashboard-container {
-  max-width: 800px;
-  margin: 40px auto;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  padding: 20px;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logout-btn {
-  background: #c0392b;
-}
-
-.menu {
-  display: flex;
-  justify-content: center;
-  margin: 30px 0;
-  gap: 20px;
-}
-
-.card {
-  background: #007b5e;
-  color: white;
-  padding: 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 18px;
-  width: 150px;
-  text-align: center;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.card:hover {
-  background: #005a43;
-}
-
-form input {
-  width: 97%;
-}
-
-form button {
-  width: 100%;
-  margin-top: 10px;
-}
-
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 table, th, td {
   border: 1px solid #ccc;
 }
 
+th {
+  background: #007b5e;
+  color: white;
+}
+
 th, td {
-  padding: 8px;
   text-align: left;
+  padding: 8px;
 }
 
 .download-btn {
-  margin-top: 10px;
-  background: #3498db;
+  margin-top: 15px;
+  float: right;
+  background: #00664a;
 }
 
-.download-btn:hover {
-  background: #217dbb;
+.logout {
+  background: #dc3545;
+  border: none;
+  padding: 8px 15px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
 }
