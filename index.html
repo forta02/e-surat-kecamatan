@@ -2,122 +2,37 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>e-Surat</title>
+  <title>Login e-Surat</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 
-<div class="dashboard-container">
-  <div class="header">
-    <h2>e-Surat</h2>
-    <button class="logout-btn" onclick="logout()">Logout</button>
-  </div>
-
-  <div class="menu">
-    <div class="card" onclick="showForm('masuk')">📥 Surat Masuk</div>
-    <div class="card" onclick="showForm('keluar')">📤 Surat Keluar</div>
-  </div>
-
-  <div id="form-container"></div>
-  <div id="table-container"></div>
+<div class="login-container">
+  <img src="https://www.kapuashulukab.go.id/home/public/assets/images/pages/pages_70Logo-KH-Baru.png" alt="Logo Kapuas Hulu" class="logo">
+  <h2>LOGIN E-SURAT</h2>
+  <form onsubmit="return validateLogin(event)">
+    <input type="text" id="username" placeholder="Username" required><br>
+    <input type="password" id="password" placeholder="Password" required><br>
+    <button type="submit">Login</button>
+    <div class="error" id="error-msg"></div>
+  </form>
 </div>
 
 <script>
-if (localStorage.getItem("loggedIn") !== "true") {
-  window.location.href = "index.html";
-}
+  function validateLogin(event) {
+    event.preventDefault();
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const errorMsg = document.getElementById("error-msg");
 
-function logout() {
-  localStorage.removeItem("loggedIn");
-  window.location.href = "index.html";
-}
-
-function showForm(type) {
-  const formContainer = document.getElementById("form-container");
-  const tableContainer = document.getElementById("table-container");
-  formContainer.innerHTML = "";
-  tableContainer.innerHTML = "";
-
-  let formHTML = `
-    <h3>Form Surat ${type === "masuk" ? "Masuk" : "Keluar"}</h3>
-    <form id="suratForm">
-      <input type="text" id="nomor" placeholder="Nomor" required>
-      <input type="text" id="nomorSurat" placeholder="Nomor Surat" required>
-      <input type="date" id="tanggalSurat" placeholder="Tanggal Surat" required>
-      <input type="text" id="hal" placeholder="Hal" required>
-      <input type="date" id="tanggalLain" placeholder="${type === "masuk" ? "Tanggal Terima" : "Tanggal Kirim"}" required>
-      <input type="text" id="asalTujuan" placeholder="${type === "masuk" ? "Asal Surat" : "Tujuan Surat"}" required>
-      <button type="submit">Simpan</button>
-    </form>
-    <button class="download-btn" onclick="downloadData('${type}')">📥 Download Excel</button>
-  `;
-
-  formContainer.innerHTML = formHTML;
-  loadTable(type);
-
-  document.getElementById("suratForm").onsubmit = function (e) {
-    e.preventDefault();
-    const data = {
-      nomor: document.getElementById("nomor").value,
-      nomorSurat: document.getElementById("nomorSurat").value,
-      tanggalSurat: document.getElementById("tanggalSurat").value,
-      hal: document.getElementById("hal").value,
-      tanggalLain: document.getElementById("tanggalLain").value,
-      asalTujuan: document.getElementById("asalTujuan").value
-    };
-
-    let storageKey = type === "masuk" ? "suratMasuk" : "suratKeluar";
-    let suratData = JSON.parse(localStorage.getItem(storageKey)) || [];
-    suratData.push(data);
-    localStorage.setItem(storageKey, JSON.stringify(suratData));
-    loadTable(type);
-    e.target.reset();
-  };
-}
-
-function loadTable(type) {
-  const tableContainer = document.getElementById("table-container");
-  let storageKey = type === "masuk" ? "suratMasuk" : "suratKeluar";
-  let suratData = JSON.parse(localStorage.getItem(storageKey)) || [];
-
-  if (suratData.length === 0) {
-    tableContainer.innerHTML = "<p>Belum ada data.</p>";
-    return;
+    if (username === "kecamatanseberuang" && password === "seberuang123") {
+      localStorage.setItem("loggedIn", "true");
+      window.location.href = "dashboard.html";
+    } else {
+      errorMsg.textContent = "Username atau Password salah.";
+    }
   }
-
-  let headers = ["Nomor", "Nomor Surat", "Tanggal Surat", "Hal", type === "masuk" ? "Tanggal Terima" : "Tanggal Kirim", type === "masuk" ? "Asal Surat" : "Tujuan Surat"];
-  let tableHTML = "<table><tr>" + headers.map(h => `<th>${h}</th>`).join("") + "</tr>";
-
-  suratData.forEach(row => {
-    tableHTML += `
-      <tr>
-        <td>${row.nomor}</td>
-        <td>${row.nomorSurat}</td>
-        <td>${row.tanggalSurat}</td>
-        <td>${row.hal}</td>
-        <td>${row.tanggalLain}</td>
-        <td>${row.asalTujuan}</td>
-      </tr>`;
-  });
-
-  tableHTML += "</table>";
-  tableContainer.innerHTML = tableHTML;
-}
-
-function downloadData(type) {
-  let storageKey = type === "masuk" ? "suratMasuk" : "suratKeluar";
-  let data = JSON.parse(localStorage.getItem(storageKey)) || [];
-  if (data.length === 0) {
-    alert("Belum ada data untuk diunduh!");
-    return;
-  }
-
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
-  XLSX.writeFile(workbook, `data_surat_${type}.xlsx`);
-}
 </script>
+
 </body>
 </html>
